@@ -53,9 +53,11 @@ class HessamReaderController extends Controller
             ])->paginate(config("hessamcms.per_page", 10));
 
             foreach ($posts_1 as $post) {
-                $trans = $post->postTranslations[0];
-                $trans->post = $post;
-                array_push($posts, $trans);
+                if (count($post->postTranslations) > 0) {
+                    $trans = $post->postTranslations[0];
+                    $trans->post = $post;
+                    array_push($posts, $trans);
+                }
             }
 
             // at the moment we handle this special case (viewing a category) by hard coding in the following two lines.

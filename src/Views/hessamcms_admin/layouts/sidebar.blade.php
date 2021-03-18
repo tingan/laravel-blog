@@ -1,4 +1,5 @@
 <ul class="list-group">
+
     <li class="list-group-item list-group-color  justify-content-between lh-condensed">
         <div>
             <h6 class="my-0"><a href="{{ route('hessamcms.admin.images.upload') }}">Languages</a></h6>
@@ -7,17 +8,17 @@
 
                 <a href='{{ route('hessamcms.admin.languages.index') }}'
                    class='list-group-item list-group-color list-group-item list-group-color-action  @if(\Request::route()->getName() === 'hessamcms.admin.languages.index') active @endif  '><i
-                            class="fa fa-language fa-fw" aria-hidden="true"></i>
+                        class="fa fa-language fa-fw" aria-hidden="true"></i>
                     All Languages</a>
 
                 <a href='{{ route('hessamcms.admin.languages.create_language') }}'
                    class='list-group-item list-group-color list-group-item list-group-color-action  @if(\Request::route()->getName() === 'hessamcms.admin.languages.create_language') active @endif  '><i
-                            class="fa fa-plus fa-fw" aria-hidden="true"></i>
+                        class="fa fa-plus fa-fw" aria-hidden="true"></i>
                     Add new Language</a>
             </div>
         </div>
     </li>
-    
+
     <li class="list-group-item list-group-color justify-content-between lh-condensed">
         <div>
             <h6 class="my-0"><a href="{{ route('hessamcms.admin.index') }}">Dashboard</a>
@@ -104,6 +105,7 @@
         </div>
 
     </li>
+
 
     @if(config("hessamcms.image_upload_enabled"))
         <li class="list-group-item list-group-color  justify-content-between lh-condensed">

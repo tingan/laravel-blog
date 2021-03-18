@@ -237,4 +237,8 @@ class HessamPostTranslation extends Model implements SearchResultInterface
     {
         return route("hessamcms.admin.edit_post", $this->post_id);
     }
+
+    public function edit_toggle_url() {
+        return route('hessamcms.admin.edit_post_toggle', $this->post_id);
+    }
 }

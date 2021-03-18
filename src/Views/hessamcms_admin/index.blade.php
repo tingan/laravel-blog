@@ -73,10 +73,10 @@
                 @endif
 
 
-                <a href="{{$post->url(app('request')->get('locale'))}}" class="card-link btn btn-outline-secondary"><i class="fa fa-file-text-o"
+                <a href="{{$post->url($locale)}}" class="card-link btn btn-outline-secondary"><i class="fa fa-file-text-o"
                                                                                                                        aria-hidden="true"></i>
                     View Post</a>
-                <a href="{{$post->edit_url()}}" class="card-link btn btn-primary">
+                <a href="{{$locale=='en' || $language_id == 1 ? $post->edit_url() : $post->edit_toggle_url() . '?selected_lang=' . $language_id}}" class="card-link btn btn-primary">
                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                     Edit Post</a>
                 <form onsubmit="return confirm('Are you sure you want to delete this blog post?\n You cannot undo this action!');"

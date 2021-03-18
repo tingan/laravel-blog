@@ -125,6 +125,10 @@ Route::group(['middleware' => ['web'], 'namespace' => '\HessamCMS\Controllers'],
                 'HessamCategoryAdminController@edit_category')
                 ->name('hessamcms.admin.categories.edit_category');
 
+            Route::get('/edit_category_toggle/{categoryId}',
+                'HessamCategoryAdminController@edit_categor_toggle')
+                ->name('hessamcms.admin.categories.edit_category_toggle');
+
             Route::patch('/edit_category/{categoryId}',
                 'HessamCategoryAdminController@update_category')
                 ->name('hessamcms.admin.categories.update_category');
@@ -156,6 +160,9 @@ Route::group(['middleware' => ['web'], 'namespace' => '\HessamCMS\Controllers'],
             Route::post('/toggle_language/{languageId}',
                 'HessamLanguageAdminController@toggle_language')
                 ->name('hessamcms.admin.languages.toggle_language');
+            Route::post('/select_language/{languageId}',
+                'HessamLanguageAdminController@select_language')
+                ->name('hessamcms.admin.languages.select_language');
 
         });
     });

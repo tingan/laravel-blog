@@ -8,7 +8,7 @@
                 <h5 class='card-title'><a class="a-link-cart-color" href='{{$category->url(app('request')->get('locale'))}}'>{{$category->category_name}}</a></h5>
 
 
-                <a href="{{$category->url(app('request')->get('locale'))}}" class="card-link btn btn-outline-secondary">View Posts in this category</a>
+                <a href="{{$category->url($locale)}}" class="card-link btn btn-outline-secondary">View Posts in this category</a>
                 <a href="{{$category->edit_url()}}" class="card-link btn btn-primary">Edit Category</a>
                 <form
 

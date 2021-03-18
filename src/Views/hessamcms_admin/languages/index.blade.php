@@ -17,15 +17,15 @@
                     </span></p>
                 <p><span><b>Selected:</b>
                     @if((Session::get('selected_lang') == $language->id) || !Session::has('selected_lang') && $language->id == 1  )
-                            Yes
+                        Yes
                         @else
-                            No
+                        No
                         @endif
                     </span></p>
                 <form
-                        onsubmit="return confirm('Are you sure you want to select this language?');"
+                    onsubmit="return confirm('Are you sure you want to select this language?');"
 
-                        method='post' action='{{route("hessamcms.admin.languages.select_language", $language->id)}}' class='float-left'>
+                    method='post' action='{{route("hessamcms.admin.languages.select_language", $language->id)}}' class='float-left'>
                     @csrf
 
                     @if($language->active == 1 && ((Session::has('selected_lang') && Session::get('selected_lang') != $language->id) || !Session::has('selected_lang') && $language->id != 1 ) )

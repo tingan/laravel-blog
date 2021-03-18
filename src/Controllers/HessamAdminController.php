@@ -23,7 +23,6 @@ use HessamCMS\Requests\CreateHessamPostToggleRequest;
 use HessamCMS\Requests\DeleteHessamCMSPostRequest;
 use HessamCMS\Requests\UpdateHessamCMSPostRequest;
 use HessamCMS\Traits\UploadFileTrait;
-
 /**
  * Class HessamAdminController
  * @package HessamCMS\Controllers
@@ -54,13 +53,28 @@ class HessamAdminController extends Controller
      */
     public function index(Request $request)
     {
-        $language_id = $request->get('language_id');
+        if ($request->session()->has('selected_lang')) {
+            $language_id = $request->session()->get('selected_lang');
+        }
+        else {
+            $language_id = 1;
+        }
+        if ($request->session()->has('selected_locale')) {
+            $locale = $request->session()->get('selected_locale');
+        }
+        else {
+            $locale = 'en';
+        }
+
+        //$language_id = !empty($request->all()['language_id']) ? $request->all()['language_id'] : $request->get('language_id') ;
+        //$locale = !empty($request->all()['locale']) ? $request->all()['locale'] : $request->get('locale') ;
         $posts = HessamPostTranslation::orderBy("post_id", "desc")->where('lang_id', $language_id)
             ->paginate(10);
 
         return view("hessamcms_admin::index", [
             'post_translations'=>$posts,
-            'language_id' => $language_id
+            'language_id' => $language_id,
+            'locale' => $locale,
         ]);
     }
 
@@ -70,7 +84,19 @@ class HessamAdminController extends Controller
      */
     public function create_post(Request $request)
     {
-        $language_id = $request->get('language_id');
+        if ($request->session()->has('selected_lang')) {
+            $language_id = $request->session()->get('selected_lang');
+        }
+        else {
+            $language_id = 1;
+        }
+        if ($request->session()->has('selected_locale')) {
+            $locale = $request->session()->get('selected_locale');
+        }
+        else {
+            $locale = 'en';
+        }
+        //$language_id = !empty($request->all()['language_id']) ? $request->all()['language_id'] : $request->get('language_id') ;
         $language_list = HessamLanguage::where('active',true)->get();
         $ts = HessamCategoryTranslation::where("lang_id",$language_id)->limit(1000)->get();
 
@@ -96,11 +122,23 @@ class HessamAdminController extends Controller
      */
     public function store_post(CreateHessamCMSPostRequest $request)
     {
+        if ($request->session()->has('selected_lang')) {
+            $language_id = $request->session()->get('selected_lang');
+        }
+        else {
+            $language_id = 1;
+        }
+        if ($request->session()->has('selected_locale')) {
+            $locale = $request->session()->get('selected_locale');
+        }
+        else {
+            $locale = 'en';
+        }
         $new_blog_post = null;
         $translation = HessamPostTranslation::where(
             [
                 ['post_id','=',$request['post_id']],
-                ['lang_id', '=', $request['lang_id']]
+                ['lang_id', '=', $language_id]
             ]
         )->first();
 
@@ -119,7 +157,7 @@ class HessamAdminController extends Controller
             $new_blog_post = HessamPost::findOrFail($request['post_id']);
         }
 
-        $post_exists = $this->check_if_same_post_exists($request['slug'] , $request['lang_id'], $request['post_id']);
+        $post_exists = $this->check_if_same_post_exists($request['slug'] , $language_id, $request['post_id']);
         if ($post_exists){
             Helpers::flash_message("Post already exists - try to change the slug for this language");
         }else {
@@ -136,7 +174,7 @@ class HessamAdminController extends Controller
             $translation->slug = $request['slug'];
             $translation->use_view_file = $request['use_view_file'];
 
-            $translation->lang_id = $request['lang_id'];
+            $translation->lang_id = $language_id;
             $translation->post_id = $new_blog_post->id;
 
             $this->processUploadedImages($request, $translation);
@@ -154,11 +192,23 @@ class HessamAdminController extends Controller
      *  This method is called whenever a language is selected
      */
     public function store_post_toggle(CreateHessamPostToggleRequest $request){
+        if ($request->session()->has('selected_lang')) {
+            $language_id = $request->session()->get('selected_lang');
+        }
+        else {
+            $language_id = 1;
+        }
+        if ($request->session()->has('selected_locale')) {
+            $locale = $request->session()->get('selected_locale');
+        }
+        else {
+            $locale = 'en';
+        }
         $new_blog_post = null;
         $translation = HessamPostTranslation::where(
             [
                 ['post_id','=',$request['post_id']],
-                ['lang_id', '=', $request['lang_id']]
+                ['lang_id', '=', $language_id]
             ]
         )->first();
 
@@ -177,7 +227,7 @@ class HessamAdminController extends Controller
         }
 
         if ($request['slug']){
-            $post_exists = $this->check_if_same_post_exists($request['slug'] , $request['lang_id'], $new_blog_post->id);
+            $post_exists = $this->check_if_same_post_exists($request['slug'] , $language_id, $new_blog_post->id);
             if ($post_exists){
                 Helpers::flash_message("Post already exists - try to change the slug for this language");
             }else{
@@ -194,7 +244,7 @@ class HessamAdminController extends Controller
                 $translation->slug = $request['slug'];
                 $translation->use_view_file = $request['use_view_file'];
 
-                $translation->lang_id = $request['lang_id'];
+                $translation->lang_id = $language_id;
                 $translation->post_id = $new_blog_post->id;
 
                 $this->processUploadedImages($request, $translation);
@@ -208,14 +258,14 @@ class HessamAdminController extends Controller
 
         //todo: generate event
 
-        $language_id = $request->get('language_id');
+        //$language_id = $request->get('language_id');
         $language_list = HessamLanguage::where('active',true)->get();
         $ts = HessamCategoryTranslation::where("lang_id",$language_id)->limit(1000)->get();
 
         $translation = HessamPostTranslation::where(
             [
                 ['post_id','=',$request['post_id']],
-                ['lang_id', '=', $request['selected_lang']]
+                ['lang_id', '=', $language_id]
             ]
         )->first();
         if (!$translation){
@@ -240,7 +290,19 @@ class HessamAdminController extends Controller
      */
     public function edit_post( $blogPostId , Request $request)
     {
-        $language_id = $request->get('language_id');
+        if ($request->session()->has('selected_lang')) {
+            $language_id = $request->session()->get('selected_lang');
+        }
+        else {
+            $language_id = 1;
+        }
+        if ($request->session()->has('selected_locale')) {
+            $locale = $request->session()->get('selected_locale');
+        }
+        else {
+            $locale = 'en';
+        }
+        //$language_id = !empty($request->all()['language_id']) ? $request->all()['language_id'] : $request->get('language_id') ;
 
         $post_translation = HessamPostTranslation::where(
             [
@@ -271,9 +333,21 @@ class HessamAdminController extends Controller
      */
     public function edit_post_toggle( $blogPostId , Request $request)
     {
+        if ($request->session()->has('selected_lang')) {
+            $language_id = $request->session()->get('selected_lang');
+        }
+        else {
+            $language_id = 1;
+        }
+        if ($request->session()->has('selected_locale')) {
+            $locale = $request->session()->get('selected_locale');
+        }
+        else {
+            $locale = 'en';
+        }
         $post_translation = HessamPostTranslation::where(
             [
-                ['lang_id', '=', $request['selected_lang']],
+                ['lang_id', '=', $language_id],
                 ['post_id', '=', $blogPostId]
             ]
         )->first();
@@ -283,13 +357,13 @@ class HessamAdminController extends Controller
 
         $post = HessamPost::findOrFail($blogPostId);
         $language_list = HessamLanguage::where('active',true)->get();
-        $ts = HessamCategoryTranslation::where("lang_id", $request['selected_lang'])->limit(1000)->get();
+        $ts = HessamCategoryTranslation::where("lang_id", $language_id)->limit(1000)->get();
 
         return view("hessamcms_admin::posts.edit_post", [
             'cat_ts' => $ts,
             'language_list' => $language_list,
-            'selected_lang' => $request['selected_lang'],
-            'selected_locale' => HessamLanguage::where('id', $request['selected_lang'])->first()->locale,
+            'selected_lang' => $language_id,
+            'selected_locale' => HessamLanguage::where('id', $language_id)->first()->locale,
             'post' => $post,
             'post_translation' => $post_translation
         ]);
@@ -305,11 +379,23 @@ class HessamAdminController extends Controller
      */
     public function update_post(UpdateHessamCMSPostRequest $request, $blogPostId)
     {
+        if ($request->session()->has('selected_lang')) {
+            $language_id = $request->session()->get('selected_lang');
+        }
+        else {
+            $language_id = 1;
+        }
+        if ($request->session()->has('selected_locale')) {
+            $locale = $request->session()->get('selected_locale');
+        }
+        else {
+            $locale = 'en';
+        }
         $new_blog_post = HessamPost::findOrFail($blogPostId);
         $translation = HessamPostTranslation::where(
             [
                 ['post_id','=', $new_blog_post->id],
-                ['lang_id', '=', $request['lang_id']]
+                ['lang_id', '=', $language_id]
             ]
         )->first();
 
@@ -318,7 +404,7 @@ class HessamAdminController extends Controller
             $new_blog_post->posted_at = Carbon::now();
         }
 
-        $post_exists = $this->check_if_same_post_exists($request['slug'] , $request['lang_id'], $blogPostId);
+        $post_exists = $this->check_if_same_post_exists($request['slug'] , $language_id, $blogPostId);
         if ($post_exists){
             Helpers::flash_message("Post already exists - try to change the slug for this language");
         }else {
@@ -335,7 +421,7 @@ class HessamAdminController extends Controller
             $translation->slug = $request['slug'];
             $translation->use_view_file = $request['use_view_file'];
 
-            $translation->lang_id = $request['lang_id'];
+            $translation->lang_id = $language_id;
             $translation->post_id = $new_blog_post->id;
 
             $this->processUploadedImages($request, $translation);

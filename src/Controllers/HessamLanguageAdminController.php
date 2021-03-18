@@ -88,4 +88,11 @@ class HessamLanguageAdminController extends Controller
         Helpers::flash_message("Language: " . $language->name . " has been disabled.");
         return redirect( route('hessamcms.admin.languages.index') );
     }
+    public function select_language(Request $request, $languageId){
+        $language = HessamLanguage::findOrFail($languageId);
+        $request->session()->put('selected_lang', $languageId);
+        $request->session()->put('selected_locale', $language->locale);
+        Helpers::flash_message("Language: " . $language->name . " has been selected.");
+        return redirect( route('hessamcms.admin.languages.index') );
+    }
 }
