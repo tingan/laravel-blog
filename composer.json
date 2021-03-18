@@ -40,19 +40,19 @@
     },
     "autoload": {
         "psr-4": {
-            "TinganCMS\\": "src",
-            "TinganCMS\\Laravel\\Fulltext\\": "src/FulltextSearch/src/" 
+            "HessamCMS\\": "src",
+            "HessamCMS\\Laravel\\Fulltext\\": "src/FulltextSearch/src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "TinganCMS\\Tests\\": "tests"
+            "HessamCMS\\Tests\\": "tests"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "TinganCMS\\TinganCMSServiceProvider"
+                "HessamCMS\\HessamCMSServiceProvider"
             ],
             "aliases": {
             }
