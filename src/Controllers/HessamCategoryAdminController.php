@@ -180,9 +180,6 @@ class HessamCategoryAdminController extends Controller
         ]);
     }
 
-    public function edit_category_toggle($categoryId, Request $request){
-
-    }
 
     /**
      * Save submitted changes

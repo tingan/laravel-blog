@@ -125,10 +125,6 @@ Route::group(['middleware' => ['web'], 'namespace' => '\HessamCMS\Controllers'],
                 'HessamCategoryAdminController@edit_category')
                 ->name('hessamcms.admin.categories.edit_category');
 
-            Route::get('/edit_category_toggle/{categoryId}',
-                'HessamCategoryAdminController@edit_categor_toggle')
-                ->name('hessamcms.admin.categories.edit_category_toggle');
-
             Route::patch('/edit_category/{categoryId}',
                 'HessamCategoryAdminController@update_category')
                 ->name('hessamcms.admin.categories.update_category');
