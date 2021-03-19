@@ -60,9 +60,6 @@
         <div class="form-group">
             <label for="category_slug">Category Tree</label>
             <ul class="wtree">
-                @php
-                mongo_debug('add_cat', $cat_roots, 'test');
-                @endphp
                 @include("hessamcms_admin::categories._category_partial", ['category_tree' => $cat_roots])
             </ul>
         </div>
