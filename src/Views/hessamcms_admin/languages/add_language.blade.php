@@ -18,7 +18,7 @@
                 <option value="BG">Bulgarian</option>
                 <option value="CA">Catalan</option>
                 <option value="KM">Cambodian</option>
-                <option value="ZH">Chinese</option>
+                <option value="ZH">中文</option>
                 <option value="HR">Croatian</option>
                 <option value="CS">Czech</option>
                 <option value="DA">Danish</option>

@@ -257,7 +257,7 @@
 </script>
 
 @if( config("hessamcms.use_wysiwyg") && config("hessamcms.echo_html"))
-    <script src="//cdn.ckeditor.com/4.15.0/full/ckeditor.js"></script>
+    <script src="//cdn.ckeditor.com/4.16.0/full/ckeditor.js"></script>
 
     <script>
         if( typeof(CKEDITOR) !== "undefined" ) {
