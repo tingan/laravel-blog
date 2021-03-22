@@ -261,7 +261,10 @@
 
     <script>
         if( typeof(CKEDITOR) !== "undefined" ) {
-            CKEDITOR.replace('post_body');
+            CKEDITOR.replace('post_body',{
+                filebrowserUploadUrl: "{{route('ckeditor.image-upload', ['_token' => csrf_token() ])}}",
+                filebrowserUploadMethod: 'form'
+            });
         }
     </script>
 @endif

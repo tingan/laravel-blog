@@ -1,6 +1,7 @@
 <?php
 
 Route::group(['middleware' => ['web'], 'namespace' => '\HessamCMS\Controllers'], function () {
+	Route::post('ckeditor/upload', 'CKEditorController@upload')->name('ckeditor.image-upload')->middleware('auth');
 
     /** The main public facing blog routes - show all posts, view a category, rss feed, view a single post, also the add comment route */
     Route::group(['prefix' => "/{locale}/".config('hessamcms.blog_prefix', 'blog')], function () {
